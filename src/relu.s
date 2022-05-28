@@ -14,8 +14,7 @@
 # ==============================================================================
 relu:
     # Error checks
-    li t0, 1
-    bge a1, t0, checks_pass
+    blt zero, a1, checks_pass
     li a1, 8    # error code
     jal exit2
 checks_pass:

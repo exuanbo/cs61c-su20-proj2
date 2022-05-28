@@ -20,13 +20,12 @@
 dot:
     # Error checks
     # check length
-    li t0, 1
-    bge a2, t0, check_stride
+    blt zero, a2, check_stride
     li a1, 5    # error code
     jal exit2
 check_stride:
-    blt a3, t0, invalid_stride
-    blt a4, t0, invalid_stride
+    bge zero, a3, invalid_stride
+    bge zero, a4, invalid_stride
     j checks_pass
 invalid_stride:
     li a1, 6    # error code
