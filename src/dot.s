@@ -48,15 +48,15 @@ checks_pass:
 loop_start:
     li t2, 0    # element counter
 loop_body:
-    slli t0, t2, 2
-    mul t0, t0, s3  # bias
-    add t0, t0, s0  # the address of the element in v0
-    lw t0, 0(t0)    # the current element of v0
-    slli t1, t2, 2
-    mul t1, t1, s4  # bias
-    add t1, t1, s1  # the address of the element in v1
-    lw t1, 0(t1)    # the current element in v1
-    mul t3, t0, t1  # the product of the two elements
+    mul t0, t2, s3  # the index of the current element of v0
+    slli t0, t0, 2
+    add t0, t0, s0  # the address of the current element of v0
+    lw t0, 0(t0)    # the value of the current element of v0
+    mul t1, t2, s4  # the index of the current element of v1
+    slli t1, t1, 2
+    add t1, t1, s1  # the address of the current element of v1
+    lw t1, 0(t1)    # the value of the current element of v1
+    mul t3, t0, t1  # the product of the two values
     add s5, s5, t3
     # loop continue
     addi t2, t2, 1

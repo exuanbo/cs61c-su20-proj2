@@ -35,9 +35,9 @@ loop_start:
     li t1, -1   # element counter
     li t2, MIN  # the largest element
 loop_body:
-    slli t0, t1, 2  # bias
-    add t0, t0, s0  # the address of the element
-    lw t0, 0(t0)    # the current element
+    slli t0, t1, 2
+    add t0, t0, s0  # the address of the current element
+    lw t0, 0(t0)    # the value of the current element
     blt t0, t2, loop_continue
     beq t0, t2, handle_equal
     mv s2, t1

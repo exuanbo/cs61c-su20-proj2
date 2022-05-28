@@ -27,9 +27,9 @@ checks_pass:
 loop_start:
     li t1, 0    # element counter
 loop_body:
-    slli, t0, t1, 2 # bias
-    add t0, t0, s0  # the address of the element
-    lw t2, 0(t0)    # the current element
+    slli, t0, t1, 2
+    add t0, t0, s0  # the address of the current element
+    lw t2, 0(t0)    # the value current element
     bge t2, zero, loop_continue
     sw zero, 0(t0)
 loop_continue:
