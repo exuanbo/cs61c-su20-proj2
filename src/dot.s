@@ -18,6 +18,20 @@
 # this function exits with error code 6.
 # =======================================================
 dot:
+    # Error checks
+    # check length
+    li t0, 1
+    bge a2, t0, check_stride
+    li a1, 5    # error code
+    jal exit2
+check_stride:
+    blt a3, t0, invalid_stride
+    blt a4, t0, invalid_stride
+    j checks_pass
+invalid_stride:
+    li a1, 6    # error code
+    jal exit2
+checks_pass:
     # Prologue
     addi sp, sp, -24
     sw s0, 0(sp)
@@ -26,18 +40,6 @@ dot:
     sw s3, 12(sp)
     sw s4, 16(sp)
     sw s5, 20(sp)
-    # check vector length
-    li t0, 1
-    bge a2, t0, check_stride
-    li a1, 5    # error code
-    jal exit2
-check_stride:
-    blt a3, t0, invalid_stride
-    blt a4, t0, invalid_stride
-    j loop_start
-invalid_stride:
-    li a1, 6    # error code
-    jal exit2
 loop_start:
     mv s0, a0   # address of v0
     mv s1, a1   # address of v1
