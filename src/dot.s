@@ -39,13 +39,13 @@ checks_pass:
     sw s3, 12(sp)
     sw s4, 16(sp)
     sw s5, 20(sp)
-loop_start:
     mv s0, a0   # the address of v0
     mv s1, a1   # the address of v1
     mv s2, a2   # the length of the vectors
     mv s3, a3   # the stride of v0
     mv s4, a4   # the stride of v1
     li s5, 0    # the result dot product
+loop_start:
     li t2, 0    # element counter
 loop_body:
     slli t0, t2, 2

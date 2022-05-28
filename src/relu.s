@@ -22,9 +22,9 @@ checks_pass:
     addi sp, sp, -8
     sw s0, 0(sp)
     sw s1, 4(sp)
-loop_start:
     mv s0, a0   # the address of the vector
     mv s1, a1   # the length of the vector
+loop_start:
     li t1, 0    # element counter
 loop_body:
     slli, t0, t1, 2 # bias

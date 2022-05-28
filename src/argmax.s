@@ -28,10 +28,10 @@ checks_pass:
     sw s0, 0(sp)
     sw s1, 4(sp)
     sw s2, 8(sp)
-loop_start:
     mv s0, a0   # the address of the vector
     mv s1, a1   # the length of the vector
     li s2, MAX  # the index of the largest element
+loop_start:
     li t1, -1   # element counter
     li t2, MIN  # the largest element
 loop_body:
