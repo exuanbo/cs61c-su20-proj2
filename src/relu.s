@@ -14,10 +14,9 @@
 # ==============================================================================
 relu:
     # Prologue
-    addi sp, sp, -12
-    sw ra, 0(sp)
-    sw s0, 4(sp)
-    sw s1, 8(sp)
+    addi sp, sp, -8
+    sw s0, 0(sp)
+    sw s1, 4(sp)
     # check vector length
     li t0, 1
     bge a1, t0, loop_start
@@ -38,8 +37,7 @@ loop_continue:
     bne t1, s1, loop_body
 loop_end:
     # Epilogue
-    lw ra, 0(sp)
-    lw s0, 4(sp)
-    lw s1, 8(sp)
-    addi sp, sp, 12
+    lw s0, 0(sp)
+    lw s1, 4(sp)
+    addi sp, sp, 8
 	ret
