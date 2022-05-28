@@ -1,3 +1,4 @@
 * linguist-vendored
 
 src/relu.s -linguist-vendored
+src/argmax.s -linguist-vendored
