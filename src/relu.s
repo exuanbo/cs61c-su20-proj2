@@ -27,15 +27,15 @@ loop_start:
     mv s0, a0   # address of the vector
     mv s1, a1   # length of the vector
     li t1, 0    # counter
-loop_continue:
-    beq t1, s1, loop_end
+loop_body:
     slli, t0, t1, 2 # bias
     add t0, t0, s0  # address of the element
     lw t2, 0(t0)    # element
-    addi t1, t1, 1
     bge t2, zero, loop_continue
     sw zero, 0(t0)
-    j loop_continue
+loop_continue:
+    addi t1, t1, 1
+    bne t1, s1, loop_body
 loop_end:
     # Epilogue
     lw ra, 0(sp)
