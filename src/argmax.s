@@ -37,11 +37,11 @@ loop_start:
 loop_body:
     slli t0, t1, 2  # bias
     add t0, t0, s0  # address of the element
-    lw t3, 0(t0)    # element
-    blt t3, t2, loop_continue
-    beq t3, t2, handle_equal
+    lw t0, 0(t0)    # element
+    blt t0, t2, loop_continue
+    beq t0, t2, handle_equal
     mv s2, t1
-    mv t2, t3
+    mv t2, t0
     j loop_continue
 handle_equal:
     bge t1, s2, loop_continue
