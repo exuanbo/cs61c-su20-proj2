@@ -41,4 +41,5 @@ loop_end:
     lw ra, 0(sp)
     lw s0, 4(sp)
     lw s1, 8(sp)
+    addi sp, sp, 12
 	ret
