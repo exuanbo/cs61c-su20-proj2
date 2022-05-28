@@ -13,17 +13,16 @@
 # this function exits with error code 8.
 # ==============================================================================
 relu:
-    # check vector length
-    li t0, 1
-    bge a1, t0, length_check_pass
-    li a1, 8    # error code
-    jal exit2
-length_check_pass:
     # Prologue
     addi sp, sp, -12
     sw ra, 0(sp)
     sw s0, 4(sp)
     sw s1, 8(sp)
+    # check vector length
+    li t0, 1
+    bge a1, t0, loop_start
+    li a1, 8    # error code
+    jal exit2
 loop_start:
     mv s0, a0   # address of the vector
     mv s1, a1   # length of the vector
