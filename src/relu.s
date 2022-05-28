@@ -25,8 +25,8 @@ length_check_pass:
     sw s0, 4(sp)
     sw s1, 8(sp)
 loop_start:
-    mv s0, a0   # address of the array
-    mv s1, a1   # length of the array
+    mv s0, a0   # address of the vector
+    mv s1, a1   # length of the vector
     li t1, 0    # counter
 loop_continue:
     beq t1, s1, loop_end
