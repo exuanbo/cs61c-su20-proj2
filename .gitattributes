@@ -1,4 +1,8 @@
 * linguist-vendored
 
 src/relu.s -linguist-vendored
+
 src/argmax.s -linguist-vendored
+
+src/dot.s -linguist-vendored
+tests/assembly/test_dot.s -linguist-vendored
