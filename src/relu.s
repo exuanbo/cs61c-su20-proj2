@@ -23,13 +23,13 @@ checks_pass:
     sw s0, 0(sp)
     sw s1, 4(sp)
 loop_start:
-    mv s0, a0   # address of the vector
-    mv s1, a1   # length of the vector
-    li t1, 0    # counter
+    mv s0, a0   # the address of the vector
+    mv s1, a1   # the length of the vector
+    li t1, 0    # element counter
 loop_body:
     slli, t0, t1, 2 # bias
-    add t0, t0, s0  # address of the element
-    lw t2, 0(t0)    # element
+    add t0, t0, s0  # the address of the element
+    lw t2, 0(t0)    # the current element
     bge t2, zero, loop_continue
     sw zero, 0(t0)
 loop_continue:

@@ -40,23 +40,23 @@ checks_pass:
     sw s4, 16(sp)
     sw s5, 20(sp)
 loop_start:
-    mv s0, a0   # address of v0
-    mv s1, a1   # address of v1
-    mv s2, a2   # length of the vectors
+    mv s0, a0   # the address of v0
+    mv s1, a1   # the address of v1
+    mv s2, a2   # the length of the vectors
     mv s3, a3   # the stride of v0
     mv s4, a4   # the stride of v1
-    li s5, 0    # dot product
-    li t2, 0    # counter
+    li s5, 0    # the result dot product
+    li t2, 0    # element counter
 loop_body:
     slli t0, t2, 2
     mul t0, t0, s3  # bias
-    add t0, t0, s0  # address of the element in v0
-    lw t0, 0(t0)    # element in v0
+    add t0, t0, s0  # the address of the element in v0
+    lw t0, 0(t0)    # the current element of v0
     slli t1, t2, 2
     mul t1, t1, s4  # bias
-    add t1, t1, s1  # address of the element in v1
-    lw t1, 0(t1)    # element in v1
-    mul t3, t0, t1  # product
+    add t1, t1, s1  # the address of the element in v1
+    lw t1, 0(t1)    # the current element in v1
+    mul t3, t0, t1  # the product of the two elements
     add s5, s5, t3
     # loop continue
     addi t2, t2, 1
