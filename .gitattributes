@@ -6,3 +6,6 @@ src/argmax.s -linguist-vendored
 
 src/dot.s -linguist-vendored
 tests/assembly/test_dot.s -linguist-vendored
+
+src/matmul.s -linguist-vendored
+tests/assembly/test_matmul.s -linguist-vendored
