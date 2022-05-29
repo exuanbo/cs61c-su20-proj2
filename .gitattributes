@@ -12,3 +12,6 @@ tests/assembly/test_matmul.s -linguist-vendored
 
 src/read_matrix.s -linguist-vendored
 tests/assembly/test_read_matrix.s -linguist-vendored
+
+src/write_matrix.s -linguist-vendored
+tests/assembly/test_write_matrix.s -linguist-vendored
