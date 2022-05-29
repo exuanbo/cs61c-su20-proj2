@@ -32,7 +32,7 @@ checks_pass:
     mv s1, a1   # the length of the vector
     li s2, MAX  # the index of the largest element
 loop_start:
-    li t1, -1   # element counter
+    li t1, 0    # element counter
     li t2, MIN  # the largest element
 loop_body:
     slli t0, t1, 2
