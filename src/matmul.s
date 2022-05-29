@@ -39,29 +39,29 @@ matmul:
     sw s4, 20(sp)
     sw s5, 24(sp)
     sw s6, 28(sp)
-    mv s0, a0   # the address of m0
-    mv s1, a1   # the number of rows of m0
-    mv s2, a2   # the number of colomns of m0
-    mv s3, a3   # the address of m1
-    mv s4, a4   # the number of rows of m1
-    mv s5, a5   # the number of columns of m1
-    mv s6, a6   # the address of result matrix
+    mv s0, a0       # the address of m0
+    mv s1, a1       # the number of rows in m0
+    mv s2, a2       # the number of colomns in m0
+    mv s3, a3       # the address of m1
+    mv s4, a4       # the number of rows in m1
+    mv s5, a5       # the number of columns in m1
+    mv s6, a6       # the address of result matrix
 outer_loop_start:
-    li t1, 0    # row counter of m0
+    li t1, 0        # row counter for m0
 outer_loop_body:
     mul t2, t1, s2  # the start index of the current row
     slli t2, t2, 2
     add t2, t2, s0  # the address of the current row
 inner_loop_start:
-    li t5, 0    # column counter of m1
+    li t5, 0        # column counter for m1
 inner_loop_body:
     slli t0, t5, 2
     add t0, t0, s3  # the address of the current column
-    mv a0, t2   # dot a0
-    mv a1, t0   # dot a1
-    mv a2, s2   # the length of the vectors
-    li a3, 1    # the stride of m0
-    mv a4, s5   # the stride of m1
+    mv a0, t2       # dot a0
+    mv a1, t0       # dot a1
+    mv a2, s2       # the length of the vectors
+    li a3, 1        # the stride of m0
+    mv a4, s5       # the stride of m1
     addi sp, sp, -12
     sw t1, 0(sp)
     sw t2, 4(sp)

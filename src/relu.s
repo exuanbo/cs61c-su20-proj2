@@ -19,10 +19,10 @@ relu:
     addi sp, sp, -8
     sw s0, 0(sp)
     sw s1, 4(sp)
-    mv s0, a0   # the address of the vector
+    mv s0, a0       # the address of the vector
     slli s1, a1, 2  # the memory size of the vector
 loop_start:
-    li t1, 0    # the address offset
+    li t1, 0        # the address offset
 loop_body:
     add t0, t1, s0  # the address of the current element
     lw t2, 0(t0)    # the value current element
