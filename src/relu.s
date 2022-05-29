@@ -14,10 +14,7 @@
 # ==============================================================================
 relu:
     # Error checks
-    blt zero, a1, checks_pass
-    li a1, 8    # error code
-    jal exit2
-checks_pass:
+    bge zero, a1, invalid_length
     # Prologue
     addi sp, sp, -8
     sw s0, 0(sp)
@@ -41,3 +38,7 @@ loop_end:
     lw s1, 4(sp)
     addi sp, sp, 8
 	ret
+
+invalid_length:
+    li a1, 8
+    jal exit2

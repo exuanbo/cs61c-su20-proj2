@@ -19,18 +19,9 @@
 # =======================================================
 dot:
     # Error checks
-    # check length
-    blt zero, a2, check_stride
-    li a1, 5    # error code
-    jal exit2
-check_stride:
+    bge zero, a2, invalid_length
     bge zero, a3, invalid_stride
     bge zero, a4, invalid_stride
-    j checks_pass
-invalid_stride:
-    li a1, 6    # error code
-    jal exit2
-checks_pass:
     # Prologue
     addi sp, sp, -24
     sw s0, 0(sp)
@@ -72,3 +63,11 @@ loop_end:
     lw s5, 20(sp)
     addi sp, sp, 24
     ret
+
+invalid_length:
+    li a1, 5
+    jal exit2
+
+invalid_stride:
+    li a1, 6
+    jal exit2

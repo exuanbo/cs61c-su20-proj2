@@ -19,10 +19,7 @@
 # =================================================================
 argmax:
     # Error checks
-    blt zero, a1, checks_pass
-    li a1, 7    # error code
-    jal exit2
-checks_pass:
+    bge zero, a1, invalid_length
     # Prologue
     addi sp, sp, -12
     sw s0, 0(sp)
@@ -57,3 +54,7 @@ loop_end:
     lw s2, 8(sp)
     addi sp, sp, 12
     ret
+
+invalid_length:
+    li a1, 7
+    jal exit2

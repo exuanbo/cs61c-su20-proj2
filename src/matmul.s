@@ -24,21 +24,11 @@
 # =======================================================
 matmul:
     # Error checks
-    # check dimensions of m0
     mul t0, a1, a2
-    bgt t0, zero, check_dimensions_m1
-    li a1, 2    # error code
-    jal exit2
-check_dimensions_m1:
+    bge zero, t0, invalid_dimension_m0
     mul t0, a4, a5
-    bgt t0, zero, check_dimensions_match
-    li a1, 3    # error code
-    jal exit2
-check_dimensions_match:
-    beq a2, a4, check_pass
-    li a1, 4    # error code
-    jal exit2
-check_pass:
+    bge zero, t0, invalid_dimension_m1
+    bne a2, a4, dimensions_not_match
     # Prologue
     addi sp, sp, -32
     sw ra, 0(sp)
@@ -105,3 +95,15 @@ outer_loop_end:
     lw s6, 28(sp)
     addi sp, sp, 32
     ret
+
+invalid_dimension_m0:
+    li a1, 2
+    jal exit2
+
+invalid_dimension_m1:
+    li a1, 3
+    jal exit2
+
+dimensions_not_match:
+    li a1, 4
+    jal exit2
