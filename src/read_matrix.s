@@ -1,5 +1,8 @@
 .globl read_matrix
 
+.data
+dimensions_buffer: .word 0 0
+
 .text
 # ==============================================================================
 # FUNCTION: Allocates memory and reads in a binary file as a matrix of integers
@@ -37,20 +40,15 @@ read_matrix:
     mv s1, a1       # the address of the number of rows
     mv s2, a2       # the address of the number of columns
 
-    # open file
+    # open the file
     mv a1, s0       # fopen a1
     li a2, 0        # read only permission
     jal fopen
     bge zero, a0, fopen_error
     mv s0, a0       # the file descriptor
 
-    # allocate memory for the buffer
-    li a0, 8        # 8 bytes for 2 4-byte numbers
-    jal malloc
-    beqz a0, malloc_error
-    mv s3, a0       # the address of the buffer
-
-    # read the dimensions into the buffer
+    # read the dimensions into the buffer and store them back to memory
+    la s3, dimensions_buffer
     mv a1, s0       # fread a1
     mv a2, s3       # fread a2
     li a3, 8        # fread a3
@@ -65,10 +63,6 @@ read_matrix:
     mul t0, t1, t2
     slli s1, t0, 2  # the length of the array
 
-    # free the memory of the buffer
-    mv a0, s3       # free a0
-    jal free
-
     # allocate memory for the matrix
     mv a0, s1       # malloc a0
     jal malloc
@@ -82,7 +76,7 @@ read_matrix:
     jal fread
     bne a0, s1, fread_error
 
-    # close file
+    # close the file
     mv a1, s0       # fclose a1
     jal fclose
     bnez a0, fclose_error
