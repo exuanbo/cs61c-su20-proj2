@@ -20,17 +20,16 @@ relu:
     sw s0, 0(sp)
     sw s1, 4(sp)
     mv s0, a0   # the address of the vector
-    mv s1, a1   # the length of the vector
+    slli s1, a1, 2  # the memory size of the vector
 loop_start:
-    li t1, 0    # element counter
+    li t1, 0    # the address offset
 loop_body:
-    slli, t0, t1, 2
-    add t0, t0, s0  # the address of the current element
+    add t0, t1, s0  # the address of the current element
     lw t2, 0(t0)    # the value current element
     bge t2, zero, loop_continue
     sw zero, 0(t0)
 loop_continue:
-    addi t1, t1, 1
+    addi t1, t1, 4
     bne t1, s1, loop_body
 loop_end:
     # Epilogue
