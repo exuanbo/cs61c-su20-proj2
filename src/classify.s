@@ -42,7 +42,7 @@ classify:
     mv s0, a1       # char **argv
     mv s1, a2       # print the classification if is zero
 
-	# =====================================
+    # =====================================
     # LOAD MATRICES
     # =====================================
 

@@ -4,10 +4,10 @@
 # ==============================================================================
 # FUNCTION: Performs an inplace element-wise ReLU on an array of ints
 # Arguments:
-# 	a0 (int*) is the pointer to the array
-#	a1 (int)  is the # of elements in the array
+#   a0 (int*) is the pointer to the array
+#   a1 (int)  is the # of elements in the array
 # Returns:
-#	None
+#   None
 #
 # If the length of the vector is less than 1,
 # this function exits with error code 8.
@@ -36,7 +36,7 @@ loop_end:
     lw s0, 0(sp)
     lw s1, 4(sp)
     addi sp, sp, 8
-	ret
+    ret
 
 invalid_length:
     li a1, 8
