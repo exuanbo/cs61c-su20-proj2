@@ -20,7 +20,7 @@ classify:
     # Usage:
     #   main.s -m -1 <M0_PATH> <M1_PATH> <INPUT_PATH> <OUTPUT_PATH>
 
-    # check the number of command line args
+    # Check the number of command line args
     li t0, 5
     bne a0, t0, wrong_arg_count
 
@@ -39,6 +39,7 @@ classify:
     sw s9, 40(sp)
     sw s10, 44(sp)
 
+    # Save the arguments
     mv s0, a1       # char **argv
     mv s1, a2       # print the classification if is zero
 
@@ -47,32 +48,32 @@ classify:
     # =====================================
 
     # Load pretrained m0
-    li a0, 8        # malloc a0
+    li a0, 8        # a0: the size of the buffer for the dimensions
     jal malloc
     mv s2, a0       # the start address of the dimensions of m0
-    lw a0, 4(s0)    # read_matrix a0
-    mv a1, s2       # read_matrix a1
-    addi a2, s2, 4  # read_matrix a2
+    lw a0, 4(s0)    # a0: the address of the filename of m0
+    mv a1, s2       # a1: the address of the number of rows in m0
+    addi a2, s2, 4  # a2: the address of the number of columns in m0
     jal read_matrix
     mv s3, a0       # the address of m0
 
     # Load pretrained m1
-    li a0, 8        # malloc a0
+    li a0, 8        # a0: the size of the buffer for the dimensions
     jal malloc
     mv s4, a0       # the start address of the dimensions of m1
-    lw a0, 8(s0)    # read_matrix a0
-    mv a1, s4       # read_matrix a1
-    addi a2, s4, 4  # read_matrix a2
+    lw a0, 8(s0)    # a0: the address of the filename of m1
+    mv a1, s4       # a1: the address of the number of rows in m1
+    addi a2, s4, 4  # a2: the address of the number of columns in m1
     jal read_matrix
     mv s5, a0       # the address of m1
 
     # Load input matrix
-    li a0, 9        # malloc a0
+    li a0, 8        # a0: the size of the buffer for the dimensions
     jal malloc
     mv s6, a0       # the start address of the dimensions of input
-    lw a0, 12(s0)   # read_matrix a0
-    mv a1, s6       # read_matrix a1
-    addi a2, s6, 4  # read_matrix a2
+    lw a0, 12(s0)   # a0: the address of the filename of input
+    mv a1, s6       # a1: the address of the number of rows in input
+    addi a2, s6, 4  # a2: the address of the number of columns in input
     jal read_matrix
     mv s7, a0       # the address of input
 
@@ -83,47 +84,47 @@ classify:
     # 2. NONLINEAR LAYER: ReLU(m0 * input)
     # 3. LINEAR LAYER:    m1 * ReLU(m0 * input)
 
-    # allocate memory for hidden layer
+    # Allocate memory for hidden layer
     lw t0, 0(s2)    # the number of rows in hidden layer == m0
     lw t1, 4(s6)    # the number of columns in hidden layer == input
     mul a0, t0, t1  # the number of elements in hidden layer
-    slli a0, a0, 2  # malloc a0
+    slli a0, a0, 2  # a0: the size of hidden layer
     jal malloc
     mv s8, a0       # the address of hidden layer
 
     # hidden_layer = matmul(m0, input)
-    mv a0, s3       # matmul a0
-    lw a1, 0(s2)    # matmul a1
-    lw a2, 4(s2)    # matmul a2
-    mv a3, s7       # matmul a3
-    lw a4, 0(s6)    # matmul a4
-    lw a5, 4(s6)    # matmul a5
-    mv a6, s8       # matmul a6
+    mv a0, s3       # a0: the address of m0
+    lw a1, 0(s2)    # a1: the number of rows in m0
+    lw a2, 4(s2)    # a2: the number of columns in m0
+    mv a3, s7       # a3: the address of input
+    lw a4, 0(s6)    # a4: the number of rows in input
+    lw a5, 4(s6)    # a5: the number of columns in input
+    mv a6, s8       # a6: the address of hidden layer
     jal matmul
 
     # relu(hidden_layer)
+    mv a0, s8       # a0: the address of hidden layer
     lw t0, 0(s2)    # the number of rows in hidden layer == m0
     lw t1, 4(s6)    # the number of columns in hidden layer == input
-    mul a1, t0, t1  # relu a1
-    mv a0, s8       # relu a0
+    mul a1, t0, t1  # a1: the number of elements in hidden layer
     jal relu
 
-    # allocate memory for score
+    # Allocate memory for score
     lw t0, 0(s4)    # the number of rows in score == m1
     lw t1, 4(s6)    # the number of columns in score == hidden layer == input
     mul a0, t0, t1  # the number of elements in score
-    slli a0, a0, 2  # malloc a0
+    slli a0, a0, 2  # a0: the size of score
     jal malloc
     mv s9, a0       # the address of score
 
     # scores = matmul(m1, hidden_layer)
-    mv a0, s5       # matmul a0
-    lw a1, 0(s4)    # matmul a1
-    lw a2, 4(s4)    # matmul a2
-    mv a3, s8       # matmul a3
-    lw a4, 0(s2)    # matmul a4
-    lw a5, 4(s6)    # matmul a5
-    mv a6, s9       # matmul a6
+    mv a0, s5       # a0: the address of m1
+    lw a1, 0(s4)    # a1: the number of rows in m1
+    lw a2, 4(s4)    # a2: the number of columns in m1
+    mv a3, s8       # a3: the address of hidden layer
+    lw a4, 0(s2)    # a4: the number of rows in hidden layer == m0
+    lw a5, 4(s6)    # a5: the number of columns in hidden layer == input
+    mv a6, s9       # a6: the address of score
     jal matmul
 
     # =====================================
@@ -131,10 +132,10 @@ classify:
     # =====================================
     # Write output matrix
 
-    lw a0, 16(s0)   # write_matrix a0
-    mv a1, s9       # write_matrix a1
-    lw a2, 0(s4)    # write_matrix a2
-    lw a3, 4(s6)    # write_matrix a3
+    lw a0, 16(s0)   # a0: the address of the filename of output
+    mv a1, s9       # a1: the address of score
+    lw a2, 0(s4)    # a2: the number of rows in score == m1
+    lw a3, 4(s6)    # a3: the number of columns in score == hidden layer == input
     jal write_matrix
 
     # =====================================
@@ -142,10 +143,10 @@ classify:
     # =====================================
     # Call argmax
 
+    mv a0, s9       # a0: the address of score
     lw t0, 0(s4)    # the number of rows in score == m1
     lw t1, 4(s6)    # the number of columns in score == hidden layer == input
-    mul a1, t0, t1  # argmax a1
-    mv a0, s9       # argmax a0
+    mul a1, t0, t1  # a1: the number of elements in score
     jal argmax
     mv s10, a0      # the classification
 
@@ -160,7 +161,7 @@ classify:
 
 skip_print:
 
-    # free space
+    # Free space
     mv a0, s2
     jal free
     mv a0, s3
@@ -178,7 +179,7 @@ skip_print:
     mv a0, s9
     jal free
 
-    # return value
+    # Load the return value
     mv a0, s10
 
     # Epilogue
@@ -195,6 +196,8 @@ skip_print:
     lw s9, 40(sp)
     lw s10, 44(sp)
     addi sp, sp, 48
+
+    # Return
     ret
 
 wrong_arg_count:

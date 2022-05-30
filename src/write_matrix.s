@@ -37,42 +37,43 @@ write_matrix:
     sw s2, 12(sp)
     sw s3, 16(sp)
 
+    # Save the arguments
     mv s0, a0       # the address of the filename
     mv s1, a1       # the address of the matrix
     mv s2, a2       # the number of rows in the matrix
     mv s3, a3       # the number of columns in the matrix
 
-    # open the file
-    mv a1, s0       # fopen a1
-    li a2, 1        # write only permission
+    # Open the file
+    mv a1, s0       # a1: the address of the filename
+    li a2, 1        # a2: 1 for write only permission
     jal fopen
     bge zero, a0, fopen_error
     mv s0, a0       # the file descriptor
 
-    # write dimensions
+    # Write dimensions
     la t0, dimensions_buffer
     sw s2, 0(t0)    # store the number of rows into the buffer
     sw s3, 4(t0)    # store the number of columns into the buffer
     # s2 and s3 now can be reused
-    mv a1, s0       # fwrite a1
-    mv a2, t0       # fwrite a2
-    li a3, 2        # fwrite a3
-    li a4, 4        # fwrite a4
+    mv a1, s0       # a1: the file descriptor
+    mv a2, t0       # a2: the address of the buffer
+    li a3, 2        # a3: the number of elements to write
+    li a4, 4        # a4: the size of each element
     jal fwrite
     li t0, 2
     blt a0, t0, fwrite_error
 
-    # write matrix
-    mul s3, s2, s3  # the number of elements to read from buffer
-    mv a1, s0       # fwrite a1
-    mv a2, s1       # fwrite a2
-    mv a3, s3       # fwrite a3
-    li a4, 4        # fwrite a4
+    # Write matrix
+    mul s3, s2, s3  # the number of elements in the matrix
+    mv a1, s0       # a1: the file descriptor
+    mv a2, s1       # a2: the address of the matrix
+    mv a3, s3       # a3: the number of elements to write
+    li a4, 4        # a4: the size of each element
     jal fwrite
     blt a0, s3, fwrite_error
 
-    # close the file
-    mv a1, s0       # fclose a1
+    # Close the file
+    mv a1, s0       # a1: the file descriptor
     jal fclose
     bnez a0, fclose_error
 
@@ -83,6 +84,8 @@ write_matrix:
     lw s2, 12(sp)
     lw s3, 16(sp)
     addi sp, sp, 20
+
+    # Return
     ret
 
 fopen_error:

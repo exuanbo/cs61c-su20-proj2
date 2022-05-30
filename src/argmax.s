@@ -18,17 +18,24 @@
 # this function exits with error code 7.
 # =================================================================
 argmax:
+
     # Error checks
     bge zero, a1, invalid_length
+
     # Prologue
     addi sp, sp, -12
     sw s0, 0(sp)
     sw s1, 4(sp)
     sw s2, 8(sp)
+
+    # Save the arguments
     mv s0, a0       # the address of the vector
     mv s1, a1       # the length of the vector
+
+    # Return value
     li s2, MAX      # the index of the largest element
-loop_start:
+
+#loop_start
     li t1, 0        # element counter
     li t2, MIN      # the largest element
 loop_body:
@@ -46,13 +53,18 @@ handle_equal:
 loop_continue:
     addi t1, t1, 1
     bne t1, s1, loop_body
-loop_end:
+#loop_end
+
+    # Load the return value
     mv a0, s2
+
     # Epilogue
     lw s0, 0(sp)
     lw s1, 4(sp)
     lw s2, 8(sp)
     addi sp, sp, 12
+
+    # Return
     ret
 
 invalid_length:

@@ -36,22 +36,23 @@ read_matrix:
     sw s2, 12(sp)
     sw s3, 16(sp)
 
+    # Save the arguments
     mv s0, a0       # the address of the filename
     mv s1, a1       # the address of the number of rows
     mv s2, a2       # the address of the number of columns
 
-    # open the file
-    mv a1, s0       # fopen a1
-    li a2, 0        # read only permission
+    # Open the file
+    mv a1, s0       # a1: the address of the filename
+    li a2, 0        # a2: 0 for read only permission
     jal fopen
     bge zero, a0, fopen_error
     mv s0, a0       # the file descriptor
 
-    # read the dimensions into the buffer and store them back to memory
+    # Read the dimensions and store them back to memory
     la s3, dimensions_buffer
-    mv a1, s0       # fread a1
-    mv a2, s3       # fread a2
-    li a3, 8        # fread a3
+    mv a1, s0       # a1: the file descriptor
+    mv a2, s3       # a2: the address of the buffer
+    li a3, 8        # a3: the number of bytes to read
     jal fread
     li t0, 8
     bne a0, t0, fread_error
@@ -60,28 +61,30 @@ read_matrix:
     sw t1, 0(s1)    # store the number of rows to memory
     sw t2, 0(s2)    # store the number of columns to memory
     # s1 and s2 now can be reused
+
+    # Calculate the size of the matrix
     mul t0, t1, t2
     slli s1, t0, 2  # the length of the array
 
-    # allocate memory for the matrix
-    mv a0, s1       # malloc a0
+    # Allocate memory for the matrix
+    mv a0, s1       # a0: the length of the array
     jal malloc
     beqz a0, malloc_error
     mv s2, a0       # the address of the matrix
 
-    # read the rest of the file into the matrix
-    mv a1, s0       # fread a1
-    mv a2, s2       # fread a2
-    mv a3, s1       # fread a3
+    # Read the rest of the file into the matrix
+    mv a1, s0       # a1: the file descriptor
+    mv a2, s2       # a2: the address of the matrix
+    mv a3, s1       # a3: the length of the array
     jal fread
     bne a0, s1, fread_error
 
-    # close the file
-    mv a1, s0       # fclose a1
+    # Close the file
+    mv a1, s0       # a1: the file descriptor
     jal fclose
     bnez a0, fclose_error
 
-    # return value
+    # Load the return value
     mv a0, s2
 
     # Epilogue
@@ -91,6 +94,8 @@ read_matrix:
     lw s2, 12(sp)
     lw s3, 16(sp)
     addi sp, sp, 20
+
+    # Return
     ret
 
 malloc_error:
